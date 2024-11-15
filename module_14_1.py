@@ -14,11 +14,14 @@ balance INTEGER NOT NULL
 ''')
 
 for i in range(1, 11):
+    # формируем запрос на выборку по имени пользователя, которого планирем добавить в таблицу
     cursor.execute('SELECT username, email, age, balance FROM Users WHERE username = ?', (f'User{i}',))
     users = cursor.fetchall()
+    # добавляем пользователя с текущим именем, только если его нет в базе данных (для избежания дублирования),
+    # т.е. добавляем только если в выборке из существующей базы данных 0 пользователей с заданным именем
     if len(users) == 0:
         cursor.execute('INSERT INTO Users (username, email, age, balance) VALUES (?,?,?,?)',
-                       (f'User{i}', f'example{i}gmail.com', i*10, 1000))
+                       (f'User{i}', f'example{i}@gmail.com', i*10, 1000))
 
 
 for i in range(1, 11, 2):
